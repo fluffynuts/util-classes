@@ -3,31 +3,31 @@ inline int ini_round (double num) {return (int)(num + 0.5);}
 #ifndef WIN32
 #ifndef strlwr
 #define strlwr(sz) \
-	for (size_t i = 0; i < strlen(sz); i++) \
-	{ \
-		if ((sz[i] >= 'A') && (sz[i] <= 'Z')) \
-			sz[i] += ('a' - 'A'); \
-	}
-#endif		
+  for (size_t i = 0; i < strlen(sz); i++) \
+  { \
+    if ((sz[i] >= 'A') && (sz[i] <= 'Z')) \
+      sz[i] += ('a' - 'A'); \
+  }
+#endif    
 #endif
 
 
 CINIFile::CINIFile(const CHAR *szFileName)
 {
-	#ifdef _SHOW_DEBUG_INFO_INI
-	printf("Constructing IniFile object, with filename \"%s\"\n", FileName.c_str());
-	#endif
+  #ifdef _SHOW_DEBUG_INFO_INI
+  printf("Constructing IniFile object, with filename \"%s\"\n", FileName.c_str());
+  #endif
   // public member varsthis->masSettingIndex, this->mstSettingIndex, const CHAR *szName);
-	this->DecimalPlaces = 3;				// default to 3 decimal places for double-to-std::string conversions
-	this->ExtendedSyntax = true;		// allow extended syntax (#addpath and #include)
-	this->AddFilePathToIncludePath = true;	// allow includes relative to the path of the loaded file
-	this->IncludesOverride = false;
-	this->MergeAllPossibleIncludes = true;
-	this->ValueRetentionEnabled = true;
+  this->DecimalPlaces = 3;        // default to 3 decimal places for double-to-std::string conversions
+  this->ExtendedSyntax = true;    // allow extended syntax (#addpath and #include)
+  this->AddFilePathToIncludePath = true;  // allow includes relative to the path of the loaded file
+  this->IncludesOverride = false;
+  this->MergeAllPossibleIncludes = true;
+  this->ValueRetentionEnabled = true;
   this->CaseSensitive = false;
   // private items
-	this->mfSorted = false;
-	this->mfTableFormat = false;
+  this->mfSorted = false;
+  this->mfTableFormat = false;
   this->mstSectionLookup = 0;
   this->masSectionLookup = NULL;
   this->mstSectionLookupAlloc = 0;
@@ -41,16 +41,16 @@ CINIFile::CINIFile(const CHAR *szFileName)
   this->maszShadow = NULL;
   this->mstShadow = 0;
   this->mszTabularLeadColumn = NULL;
-	this->mstIncludePaths = 0;
-	this->maszIncludePaths = 0;
-	this->mszMainFileExt[0] = '\0';
+  this->mstIncludePaths = 0;
+  this->maszIncludePaths = 0;
+  this->mszMainFileExt[0] = '\0';
   // string pool
   this->mstStringPool = 0;
   this->mstStringPoolAlloc = 0;
   this->masStringPool = NULL;
   
-	if (szFileName)
-		this->LoadFile(szFileName);
+  if (szFileName)
+    this->LoadFile(szFileName);
 }
 
 CINIFile::~CINIFile()
@@ -136,7 +136,7 @@ long long CINIFile::LookUpSectionByName(const CHAR *szSection)
   long llLower = 0;
   long llUpper = (long)(this->mstSectionLookup); llUpper-=1;
   long llTest;
-	SLookup **a = this->masSectionLookup;
+  SLookup **a = this->masSectionLookup;
   while (llUpper >= llLower)
   {
     llTest = llLower + (size_t)((llUpper - llLower)/2);
@@ -186,7 +186,7 @@ bool CINIFile::GetOverrideBoolValue(const CHAR *szSections, const CHAR *szName, 
     szDefaultValue, szSectionDelimiter);
   bool ret = this->SZToBool(tmp);
   this->ReleaseClone(&szDefaultValue);
-	return ret;
+  return ret;
 }
 
 double CINIFile::GetOverrideDoubleValue(const CHAR *szSections, const CHAR *szName, double dblDefaultVal,
@@ -196,7 +196,7 @@ double CINIFile::GetOverrideDoubleValue(const CHAR *szSections, const CHAR *szNa
   const CHAR *tmp = this->GetOverrideSZValue(szSections, szName, szDefault, szSectionDelimiter);
   double ret = strtod(tmp, NULL);
   this->ReleaseClone(&szDefault);
-	return ret;
+  return ret;
 }
 
 long long CINIFile::GetOverrideLongLongValue(const CHAR *szSections, const CHAR *szName, long long llDefaultVal, 
@@ -210,7 +210,7 @@ long long CINIFile::GetOverrideLongLongValue(const CHAR *szSections, const CHAR 
   #else
   long long ret = (long long)atoll(tmp);
   #endif
-	return ret;
+  return ret;
 }
 
 CHAR *CINIFile::GenINIRelativePath(const CHAR *szSrcPath)
@@ -460,19 +460,19 @@ const CHAR *CINIFile::GetNumberedSZValue(const CHAR *szSection, const CHAR *szBa
                 
 unsigned int CINIFile::GetUIntValue(const CHAR *szSection, const CHAR *szName, unsigned int uiDefaultValue, bool blnRetainDefault)
 {
-	unsigned int retVal = uiDefaultValue;
-	
+  unsigned int retVal = uiDefaultValue;
+  
   CHAR *szDefault = this->IntToSZ((long long)uiDefaultValue);
-	const CHAR *tmp = this->GetSZValue(szSection, szName, szDefault, blnRetainDefault);
+  const CHAR *tmp = this->GetSZValue(szSection, szName, szDefault, blnRetainDefault);
   this->ReleaseClone(&szDefault);
-	retVal = strtoul(tmp, NULL, 10);
-	return retVal;
+  retVal = strtoul(tmp, NULL, 10);
+  return retVal;
 }
 
 bool CINIFile::GetBoolValue(const CHAR *szSection, const CHAR *szName, bool blnDefaultValue, bool blnRetainDefault)
 {
   CHAR *szDefault = this->BoolToSZ(blnDefaultValue);
-	bool ret = this->SZToBool(this->GetSZValue(szSection, szName, szDefault, blnRetainDefault));
+  bool ret = this->SZToBool(this->GetSZValue(szSection, szName, szDefault, blnRetainDefault));
   this->ReleaseClone(&szDefault);
   return ret;
 }
@@ -480,7 +480,7 @@ bool CINIFile::GetBoolValue(const CHAR *szSection, const CHAR *szName, bool blnD
 double CINIFile::GetDoubleValue(const CHAR *szSection, const CHAR *szName, double dblDefaultValue, bool blnRetainDefault)
 {
   CHAR *szDefault = this->DoubleToSZ(dblDefaultValue);
-	double ret = atof(this->GetSZValue(szSection, szName, szDefault, blnRetainDefault));
+  double ret = atof(this->GetSZValue(szSection, szName, szDefault, blnRetainDefault));
   this->ReleaseClone(&szDefault);
   return ret;
 }
@@ -501,18 +501,18 @@ long long CINIFile::GetLongLongValue(const CHAR *szSection, const CHAR *szName, 
 
 CHAR *CINIFile::DoubleToSZ(double val)
 {
-	long long predec = (long long)val;
-	CHAR *szPreDec = this->IntToSZ(predec);
+  long long predec = (long long)val;
+  CHAR *szPreDec = this->IntToSZ(predec);
   CHAR *ret = this->CloneStr(szPreDec, this->DecimalPlaces + 4);
   this->ReleaseClone(&szPreDec);
-	unsigned int mul = 1;
-	for (unsigned int i = 0; i < this->DecimalPlaces; i++)
-		mul *= 10;
-	double dec = (val - (double)predec) * mul;
-	
-	if (dec)
-	{
-		strcat(ret, ".");
+  unsigned int mul = 1;
+  for (unsigned int i = 0; i < this->DecimalPlaces; i++)
+    mul *= 10;
+  double dec = (val - (double)predec) * mul;
+  
+  if (dec)
+  {
+    strcat(ret, ".");
     CHAR *szTmp = this->IntToSZ((unsigned int)ini_round(dec));
     strcat(ret, szTmp);
     this->ReleaseClone(&szTmp);
@@ -522,8 +522,8 @@ CHAR *CINIFile::DoubleToSZ(double val)
       ret[strlen(ret)-1] = '\0';
     if (ret[strlen(ret)-1] == '.')
       ret[strlen(ret)-1] = '\0';
-	}
-	return ret;
+  }
+  return ret;
 }
 
 bool CINIFile::Loaded()
@@ -546,17 +546,17 @@ bool CINIFile::IsTabular(CHAR *szSrc, CHAR ***aszHeadings, size_t *stHeadings, C
   CHAR *szLine = NULL;
   CHAR *szTrimmedLine = NULL;
   do
-  {	// "slice" first non-comment, non-empty line out of the src into szLine
+  {  // "slice" first non-comment, non-empty line out of the src into szLine
     this->ReleaseClone(&szTrimmedLine);
-		if (pos2)
-			*pos2 = '\n';
+    if (pos2)
+      *pos2 = '\n';
     pos2 = strstr(pos1, "\n");
     if (pos2 == NULL)
       pos2 = pos1 + strlen(pos1);
-		szLine = pos1;
-		*pos2 = '\0';
-		szTrimmedLine = this->CloneStr(szLine);
-		this->trim(szTrimmedLine);
+    szLine = pos1;
+    *pos2 = '\0';
+    szTrimmedLine = this->CloneStr(szLine);
+    this->trim(szTrimmedLine);
     pos1 = pos2 + 1;
   } while (((strlen(szTrimmedLine) == 0) || (szTrimmedLine[0] == ';'))); // ignore comment lines as well
   CHAR *szCommentStart = strstr(szTrimmedLine, ";");
@@ -599,7 +599,7 @@ bool CINIFile::IsTabular(CHAR *szSrc, CHAR ***aszHeadings, size_t *stHeadings, C
     *szDelimiter = this->CloneStr(",");
     *stHeadings = this->split_buffer(aszHeadings, szLine, *szDelimiter);
     this->SetTabular(true, (*aszHeadings)[0]);
-		return true;
+    return true;
   }
   // look for tab delimited
   *szDelimiter = this->CloneStr("\t");
@@ -617,17 +617,17 @@ bool CINIFile::LoadFile(const CHAR *szFileName, bool fMerge)
     this->mfFileLoaded = false;
     return false;
   }
-	if (!this->FileExists(szFileName))
-	{
-	  #ifdef _SHOW_DEBUG_INFO_INI
-  	fprintf(stderr, "ERROR: Unable to open \"%s\": file cannot be found.\n", szFileName);
-	  #endif
-	  this->mfFileLoaded = false;
+  if (!this->FileExists(szFileName))
+  {
+    #ifdef _SHOW_DEBUG_INFO_INI
+    fprintf(stderr, "ERROR: Unable to open \"%s\": file cannot be found.\n", szFileName);
+    #endif
+    this->mfFileLoaded = false;
     return false;
-	}
-	
-	CHAR *szToLoad = NULL;
-	if (fMerge)
+  }
+  
+  CHAR *szToLoad = NULL;
+  if (fMerge)
   { // append data onto szshadow
     size_t stRead = 0;
     if (!this->ReadFileToMem(szFileName, (void **)(&(szToLoad)), &stRead, true, true))
@@ -654,10 +654,10 @@ bool CINIFile::LoadFile(const CHAR *szFileName, bool fMerge)
   }
 
   // invoke LoadSZ_Internal on the shadow buffer
-	if (szToLoad)
-	  return this->LoadSZ_Internal(szToLoad, fMerge);
-	else
-		return false;
+  if (szToLoad)
+    return this->LoadSZ_Internal(szToLoad, fMerge);
+  else
+    return false;
 }
 
 bool CINIFile::LoadSZ(const CHAR *szIniData, bool fMerge)
@@ -731,15 +731,15 @@ bool CINIFile::LoadSZ_Internal(CHAR *szIniDataIN, bool fMerge)
   if ((szIniDataIN == NULL) || (strlen(szIniDataIN) == 0))
     return true;  // nothing to do
   CHAR *szIniData = szIniDataIN;
-	if (this->ExtendedSyntax && (strcmp(this->mszMainFileExt, MEMORY_FILENAME)))
-		this->CheckIncludePaths(szIniData);
-	#ifdef _SHOW_DEBUG_INFO_INI
-	printf("CINIFile::loadFile: loading from file '%s'\n", strFileName.c_str());
-	#endif
+  if (this->ExtendedSyntax && (strcmp(this->mszMainFileExt, MEMORY_FILENAME)))
+    this->CheckIncludePaths(szIniData);
+  #ifdef _SHOW_DEBUG_INFO_INI
+  printf("CINIFile::loadFile: loading from file '%s'\n", strFileName.c_str());
+  #endif
   CHAR **aszLines = NULL;
   size_t stLines;
   CHAR **aszHeadings = NULL;
-	size_t stHeadings = 0;
+  size_t stHeadings = 0;
   CHAR *szDelimiter = NULL;
 
   CHAR *szIniDataStart = NULL;
@@ -757,83 +757,83 @@ bool CINIFile::LoadSZ_Internal(CHAR *szIniDataIN, bool fMerge)
   CHAR *szEndOfShadow = szIniData + strlen(szIniData);  // used as a pointer for empty string (:
   const CHAR *szLineDelimiter = "\n"; // deal with \n and \r\n 
   stLines = this->split_buffer(&aszLines, szIniData, szLineDelimiter, "\"");
-	  
+    
   CHAR *szCurrentSection = NULL;
   CHAR *szName = NULL, *szValue = NULL;
-	CHAR *szLine = NULL;
+  CHAR *szLine = NULL;
   CHAR **aszSplitLine = NULL;
   size_t stSplitLine = 0;
-	unsigned int idx;
-	
-	unsigned long linenum = 0;
+  unsigned int idx;
+  
+  unsigned long linenum = 0;
   CHAR *szComment = NULL;
   bool fInINI = (stLines > 0);
-	while (fInINI)
-	{
+  while (fInINI)
+  {
     szLine = aszLines[linenum++];
     fInINI = (linenum < stLines);
 
-		this->CleanLine(&szLine, &szComment);
-		#ifdef INI_DEBUG
-		printf("read line: '%s'\n", szLine);
-		#endif
-		if (strlen(szLine))
-		{
-			if (szLine[0] == '[')
-			{
+    this->CleanLine(&szLine, &szComment);
+    #ifdef INI_DEBUG
+    printf("read line: '%s'\n", szLine);
+    #endif
+    if (strlen(szLine))
+    {
+      if (szLine[0] == '[')
+      {
         szCurrentSection = szLine;
         this->trim(szCurrentSection, "[]");
-				#ifdef INI_DEBUG
-				printf("IniFile: reading from section: %s\n", szCurrentSection);
-				#endif
-				continue;
-			}
-			else if ((szLine[0] == '#') && (this->ExtendedSyntax))
-			{
-			  if (strcmp(this->mszMainFile, MEMORY_FILENAME) == 0)
-			  {
-			    #ifdef INI_DEBUG
-			    fprintf(stderr, "Unable to perform #include or #addpath: main file is memory-based\n");
-			    #endif
-			  }
-			  else if (this->ExtendedSyntax)
-			  {
-  				if (strstr(szLine, "#include") == szLine)
-  				{
+        #ifdef INI_DEBUG
+        printf("IniFile: reading from section: %s\n", szCurrentSection);
+        #endif
+        continue;
+      }
+      else if ((szLine[0] == '#') && (this->ExtendedSyntax))
+      {
+        if (strcmp(this->mszMainFile, MEMORY_FILENAME) == 0)
+        {
+          #ifdef INI_DEBUG
+          fprintf(stderr, "Unable to perform #include or #addpath: main file is memory-based\n");
+          #endif
+        }
+        else if (this->ExtendedSyntax)
+        {
+          if (strstr(szLine, "#include") == szLine)
+          {
             CHAR **aszParts = NULL;
             size_t stParts = this->split_buffer(&aszParts, szLine, " ", "\"");
-  					if (stParts > 1)
-  					  this->IncludeFile(this->trim(aszParts[1]));
-  					#ifdef INI_DEBUG
-  					else
-  					  fprintf(stderr, "ERROR: Incomplete #include at line %li of (perhaps) file %s\n", linenum, this->mszMainFile);
-  					#endif
+            if (stParts > 1)
+              this->IncludeFile(this->trim(aszParts[1]));
+            #ifdef INI_DEBUG
+            else
+              fprintf(stderr, "ERROR: Incomplete #include at line %li of (perhaps) file %s\n", linenum, this->mszMainFile);
+            #endif
             if (aszParts)
               free(aszParts); // contents of aszParts are still in shadow buffer
-  				}
-  				else if (strstr(szLine, "#addpath"))
-  				{
+          }
+          else if (strstr(szLine, "#addpath"))
+          {
             CHAR **aszParts = NULL;
             size_t stParts = this->split(&aszParts, szLine, " ", "\"");
-  					if (stParts > 1)
-  						this->AddPath(this->trim(aszParts[1]));
-  					#ifdef INI_DEBUG
-  					else
-  					  fprintf(stderr, "ERROR: Incomplete #addpath at line %li of (perhaps) file %s\n", linenum, this->mszMainFile);
-  					#endif
+            if (stParts > 1)
+              this->AddPath(this->trim(aszParts[1]));
+            #ifdef INI_DEBUG
+            else
+              fprintf(stderr, "ERROR: Incomplete #addpath at line %li of (perhaps) file %s\n", linenum, this->mszMainFile);
+            #endif
             if (aszParts)
               free(aszParts);
-  				}
-  			}
-			}
-			else
-			{
-			  /*
+          }
+        }
+      }
+      else
+      {
+        /*
         stSplitLine = this->split_buffer(&aszSplitLine, szLine, "=");
         szName = this->trim(aszSplitLine[0], "\t ");
-				if (stSplitLine == 2)
-					szValue = this->trim(aszSplitLine[1], "\t\r\n ");
-				else if (stSplitLine > 2)
+        if (stSplitLine == 2)
+          szValue = this->trim(aszSplitLine[1], "\t\r\n ");
+        else if (stSplitLine > 2)
         {
           // rejoin the leftover pieces of this line with = & then trim
           for (size_t i = 2; i < stSplitLine; i++)
@@ -844,8 +844,8 @@ bool CINIFile::LoadSZ_Internal(CHAR *szIniDataIN, bool fMerge)
           }
           szValue = this->trim(aszSplitLine[1], "\t\r\n ");
         }
-				else
-					szValue = szEndOfShadow;
+        else
+          szValue = szEndOfShadow;
         free(aszSplitLine);
         */
         szName = szLine;
@@ -859,137 +859,137 @@ bool CINIFile::LoadSZ_Internal(CHAR *szIniDataIN, bool fMerge)
         else
           szValue = NULL;
           
-			  if (szValue && (strlen(szValue) > 1) && (szValue[0] == '"') && (szValue[strlen(szValue)-1] == '"'))
-			  {
+        if (szValue && (strlen(szValue) > 1) && (szValue[0] == '"') && (szValue[strlen(szValue)-1] == '"'))
+        {
           this->trim(szValue, "\"");
 #define HANDLE_ERR(code) \
           do { \
             int ret = code; \
-						if (ret < 0) \
-							return false; \
+            if (ret < 0) \
+              return false; \
           } while (0);
-  			  HANDLE_ERR(this->str_replace(&szValue, "\\\"", "\""));
-  			  HANDLE_ERR(this->str_replace(&szValue, "\\\\", "\\"));
-  			  HANDLE_ERR(this->str_replace(&szValue, "\\n", "\n"));
-  			  HANDLE_ERR(this->str_replace(&szValue, "\\r", "\r"));
-  			  HANDLE_ERR(this->str_replace(&szValue, "\\t", "\t"));
+          HANDLE_ERR(this->str_replace(&szValue, "\\\"", "\""));
+          HANDLE_ERR(this->str_replace(&szValue, "\\\\", "\\"));
+          HANDLE_ERR(this->str_replace(&szValue, "\\n", "\n"));
+          HANDLE_ERR(this->str_replace(&szValue, "\\r", "\r"));
+          HANDLE_ERR(this->str_replace(&szValue, "\\t", "\t"));
 #undef HANDLE_ERR
-  		  }
-				
-				if (this->IncludesOverride || !this->ValueExists(szCurrentSection, szName))
-				{
-					idx = this->SetValue(szCurrentSection, szName, szValue, szComment, false, true);
-				  #ifdef _SHOW_DEBUG_INFO_INI
-				  printf("IniFile: set parameter %u: '%s', value '%s', to section '%s'\n",
-							idx,
-						  this->vSettings[idx]->Name.c_str(),
-						  this->vSettings[idx]->Value.c_str(),
-						  this->vSettings[idx]->Section.c_str());
-				  #endif
-				}
-				#ifdef _SHOW_DEBUG_INFO_INI
-				else
-				{
-				  printf("IniFile: Not overiding existing parameter '%s' of section '%s'\n", 
-				    szName, szCurrentSection);
-				}
-				#endif
-			}
-		}
-		else if (szComment && strlen(szComment))
-		{
+        }
+        
+        if (this->IncludesOverride || !this->ValueExists(szCurrentSection, szName))
+        {
+          idx = this->SetValue(szCurrentSection, szName, szValue, szComment, false, true);
+          #ifdef _SHOW_DEBUG_INFO_INI
+          printf("IniFile: set parameter %u: '%s', value '%s', to section '%s'\n",
+              idx,
+              this->vSettings[idx]->Name.c_str(),
+              this->vSettings[idx]->Value.c_str(),
+              this->vSettings[idx]->Section.c_str());
+          #endif
+        }
+        #ifdef _SHOW_DEBUG_INFO_INI
+        else
+        {
+          printf("IniFile: Not overiding existing parameter '%s' of section '%s'\n", 
+            szName, szCurrentSection);
+        }
+        #endif
+      }
+    }
+    else if (szComment && strlen(szComment))
+    {
       CINIFile::CIniFileItem *ii = new CIniFileItem();
-		  ii->IsLineComment = true;
-		  ii->Comment = szComment;
-		  
-		  long long sidx = this->SectionIDX(szCurrentSection);
-		  CIniFileSection *section;
-		  if (sidx < 0)
-		  {
-		    section = new CIniFileSection();
+      ii->IsLineComment = true;
+      ii->Comment = szComment;
+      
+      long long sidx = this->SectionIDX(szCurrentSection);
+      CIniFileSection *section;
+      if (sidx < 0)
+      {
+        section = new CIniFileSection();
         section->owner = this;
         if (szCurrentSection)
-		      section->Name = szCurrentSection;
-		    else
-		    {
-		      CLONESTR(section->Name, "");
-		      section->ChangedName = true;
-		    }
-				this->PushSection(section);
-				if (szCurrentSection) // allow for the "global" section (which has no name)
-		      this->AddSectionLookup(szCurrentSection, this->mstSections - 1);
-		    else
-		      this->AddSectionLookup("", this->mstSections - 1);
-		  }
-		  else
-		    section = this->masSections[(size_t)sidx];
-		  section->PushSetting(ii);
-		}
-	}
-	if (aszHeadings)
-		this->FreeSZArray(aszHeadings, stHeadings);
-  free(aszLines); // remember the actual buffer used for aszLines' strings is mszShadow!
-	if (szComment && strlen(szComment))
-	{
-	  if (fMerge)
-		{
-			CHAR *tmp = this->CloneStr(this->mszTrailingComment, strlen(szComment) + strlen(NEWLINE));
-			strcat(tmp, NEWLINE);
-			strcat(tmp, szComment);
-			this->ReleaseClone(&(this->mszTrailingComment));
-			this->mszTrailingComment = tmp;
-		}
-    else
-		{
-			if (this->mszTrailingComment)
-				this->ReleaseClone(&(this->mszTrailingComment));
-      this->mszTrailingComment = this->CloneStr(szComment);
-		}
+          section->Name = szCurrentSection;
+        else
+        {
+          CLONESTR(section->Name, "");
+          section->ChangedName = true;
+        }
+        this->PushSection(section);
+        if (szCurrentSection) // allow for the "global" section (which has no name)
+          this->AddSectionLookup(szCurrentSection, this->mstSections - 1);
+        else
+          this->AddSectionLookup("", this->mstSections - 1);
+      }
+      else
+        section = this->masSections[(size_t)sidx];
+      section->PushSetting(ii);
+    }
   }
-	return (this->mfFileLoaded = true);
+  if (aszHeadings)
+    this->FreeSZArray(aszHeadings, stHeadings);
+  free(aszLines); // remember the actual buffer used for aszLines' strings is mszShadow!
+  if (szComment && strlen(szComment))
+  {
+    if (fMerge)
+    {
+      CHAR *tmp = this->CloneStr(this->mszTrailingComment, strlen(szComment) + strlen(NEWLINE));
+      strcat(tmp, NEWLINE);
+      strcat(tmp, szComment);
+      this->ReleaseClone(&(this->mszTrailingComment));
+      this->mszTrailingComment = tmp;
+    }
+    else
+    {
+      if (this->mszTrailingComment)
+        this->ReleaseClone(&(this->mszTrailingComment));
+      this->mszTrailingComment = this->CloneStr(szComment);
+    }
+  }
+  return (this->mfFileLoaded = true);
 }
 
 bool CINIFile::LoadTabularSZ(CHAR *szContents, CHAR **aszHeaders, size_t stHeaders, CHAR *szDelimiter)
 {
-	CHAR **aszLines = NULL;
+  CHAR **aszLines = NULL;
   size_t stLines = this->split_buffer(&aszLines, szContents, "\n");
-	CHAR **aszParts = NULL;
-	size_t stParts = 0;
+  CHAR **aszParts = NULL;
+  size_t stParts = 0;
   bool fCheckQuoted = false;
   if (strcmp(szDelimiter, ",") == 0)
     fCheckQuoted = true;  // CSV files can be value,value,value, or "value","value","value"
-	CHAR *szLine, *szPart;
+  CHAR *szLine, *szPart;
   for (size_t i = 0; i < stLines; i++) // first line should be headers
   {
-		szLine = aszLines[i];
+    szLine = aszLines[i];
     this->trim(szLine);
-		stParts = this->split_buffer(&aszParts, szLine, szDelimiter);
-		szPart = this->trim(aszParts[0]);
+    stParts = this->split_buffer(&aszParts, szLine, szDelimiter);
+    szPart = this->trim(aszParts[0]);
     if (this->SectionExists(szPart) || (strlen(szPart) == 0))
     {
-			free(aszParts);
+      free(aszParts);
       continue;   // first section wins out for tabular data
     }
-		CIniFileSection *is = new CIniFileSection();
-		is->owner = this;
-		is->Name = szPart;
-		for (size_t j = 1; j < stHeaders; j++)   // first header becomes section name
-		{
-		  CIniFileItem *ii = new CIniFileItem();
-		  ii->Name = aszHeaders[j];
-		  if (j < stParts)
-		  {
-  		  ii->Value = this->trim(aszParts[j], " \t\r\n\"");
-  		}
-		  is->PushSetting(ii);
-		}
-		
-		this->PushSection(is);
-		this->AddSectionLookup(is->Name, this->mstSections - 1);
-		free(aszParts);
+    CIniFileSection *is = new CIniFileSection();
+    is->owner = this;
+    is->Name = szPart;
+    for (size_t j = 1; j < stHeaders; j++)   // first header becomes section name
+    {
+      CIniFileItem *ii = new CIniFileItem();
+      ii->Name = aszHeaders[j];
+      if (j < stParts)
+      {
+        ii->Value = this->trim(aszParts[j], " \t\r\n\"");
+      }
+      is->PushSetting(ii);
+    }
+    
+    this->PushSection(is);
+    this->AddSectionLookup(is->Name, this->mstSections - 1);
+    free(aszParts);
   }
-	free(aszLines);
-	free(aszHeaders);
+  free(aszLines);
+  free(aszHeaders);
   this->mfTableFormat = true;
   return true;
 } 
@@ -1027,18 +1027,18 @@ CHAR *CINIFile::DirName(const CHAR *szFileName)
   CHAR *pos = strrchr(ret, PATH_DELIMITER_C);
   if (pos)
     *pos = '\0';
-	return ret;
+  return ret;
 }
 
 void CINIFile::CheckIncludePaths(const CHAR *szFileName)
 {
   // adds the base dir of the file to the include dirs
   CHAR *szDirName = this->DirName(szFileName);
-	for (unsigned int i = 0; i < this->mstIncludePaths; i++)
-	{
-		if (strcmp(szDirName, this->maszIncludePaths[i]) == 0)
-			return; // already have this include path on the stack
-	}
+  for (unsigned int i = 0; i < this->mstIncludePaths; i++)
+  {
+    if (strcmp(szDirName, this->maszIncludePaths[i]) == 0)
+      return; // already have this include path on the stack
+  }
   // add this include path
   this->mstIncludePaths++;
   this->maszIncludePaths = (CHAR **)realloc(this->maszIncludePaths, this->mstIncludePaths * sizeof(CHAR*));
@@ -1054,129 +1054,129 @@ void CINIFile::IncludeFile(const CHAR *szFileName)
   #ifdef _SHOW_DEBUG_INFO_INI
   printf("Including file %s\n", szFileName);
   #endif
-	struct stat st;
-	// make sure that relative paths are found wrt the main file
-	char *szCwd;
-	szCwd = getcwd(NULL, 512);
+  struct stat st;
+  // make sure that relative paths are found wrt the main file
+  char *szCwd;
+  szCwd = getcwd(NULL, 512);
   CHAR *szMainDir = this->DirName(this->mszMainFile);
-	if (chdir(szMainDir) != 0)
-	{
-		fprintf(stderr, "Can't chdir() to '%s'; won't include files from there\n",
-			szMainDir);
-		this->ReleaseClone(&szMainDir);
-		return;
-	}
-	this->ReleaseClone(&szMainDir);
-	CHAR **aszIncludeFiles = (CHAR **)malloc((1 + this->mstIncludePaths) * sizeof(CHAR *));
-	size_t stIncludeFiles = 0;
-	if (stat(szFileName, &st) == 0)
-		aszIncludeFiles[stIncludeFiles++] = this->CloneStr(szFileName);
-	size_t stFileNameLen = strlen(szFileName);
-	if (!this->MergeAllPossibleIncludes || (stIncludeFiles == 0))
-	{
-		// search for the file in include paths
-		for (unsigned int i = 0; i < this->mstIncludePaths; i++)
-		{
-			CHAR *tmp = this->CloneStr(this->maszIncludePaths[i], strlen(PATH_DELIMITER) + stFileNameLen);
-			strcat(tmp, PATH_DELIMITER);
-			strcat(tmp, szFileName);
-			if (stat(tmp, &st) == 0)
-			{
-				aszIncludeFiles[stIncludeFiles++] = tmp;
-			  if (!this->MergeAllPossibleIncludes)
-			    break;
-			}
-			else
-				this->ReleaseClone(&tmp);
-		}
-	}
-	
+  if (chdir(szMainDir) != 0)
+  {
+    fprintf(stderr, "Can't chdir() to '%s'; won't include files from there\n",
+      szMainDir);
+    this->ReleaseClone(&szMainDir);
+    return;
+  }
+  this->ReleaseClone(&szMainDir);
+  CHAR **aszIncludeFiles = (CHAR **)malloc((1 + this->mstIncludePaths) * sizeof(CHAR *));
+  size_t stIncludeFiles = 0;
+  if (stat(szFileName, &st) == 0)
+    aszIncludeFiles[stIncludeFiles++] = this->CloneStr(szFileName);
+  size_t stFileNameLen = strlen(szFileName);
+  if (!this->MergeAllPossibleIncludes || (stIncludeFiles == 0))
+  {
+    // search for the file in include paths
+    for (unsigned int i = 0; i < this->mstIncludePaths; i++)
+    {
+      CHAR *tmp = this->CloneStr(this->maszIncludePaths[i], strlen(PATH_DELIMITER) + stFileNameLen);
+      strcat(tmp, PATH_DELIMITER);
+      strcat(tmp, szFileName);
+      if (stat(tmp, &st) == 0)
+      {
+        aszIncludeFiles[stIncludeFiles++] = tmp;
+        if (!this->MergeAllPossibleIncludes)
+          break;
+      }
+      else
+        this->ReleaseClone(&tmp);
+    }
+  }
+  
   #ifdef _SHOW_DEBUG_INFO_INI
-	if (vsIncludeFiles.size() == 0)
-	{
-		printf("ERROR: Unable to find file for inclusion: '%s'\n", strFileName.c_str());
-	}
+  if (vsIncludeFiles.size() == 0)
+  {
+    printf("ERROR: Unable to find file for inclusion: '%s'\n", strFileName.c_str());
+  }
   #endif
   for (size_t i = 0; i < stIncludeFiles; i++)
   {
     if (stat(aszIncludeFiles[i], &st) == 0)
-		  this->LoadFile(aszIncludeFiles[i], true);
-		this->ReleaseClone(&(aszIncludeFiles[i]));
-	}
-	if (chdir(szCwd))
-	{
-		fprintf(stderr, "Unable to chdir() back to '%s'\n", szCwd);
-	}
-	free(szCwd);
-	free(aszIncludeFiles);
+      this->LoadFile(aszIncludeFiles[i], true);
+    this->ReleaseClone(&(aszIncludeFiles[i]));
+  }
+  if (chdir(szCwd))
+  {
+    fprintf(stderr, "Unable to chdir() back to '%s'\n", szCwd);
+  }
+  free(szCwd);
+  free(aszIncludeFiles);
 }
 
 void CINIFile::AddPath(const CHAR *szPath)
 {
-	struct stat st;
-	// make sure that relative paths are found wrt the main file
-	#ifdef _SHOW_DEBUG_INFO_INI
-	printf("Adding include path %s\n", szPath);
-	#endif
-	char *szCwd;
-	szCwd = getcwd(NULL, 512);
-	CHAR *szMainDir = this->DirName(this->mszMainFile);
-	if (chdir(szMainDir) != 0)
-	{
-		fprintf(stderr, "Unable to chdir() to '%s'; can't add path\n",szMainDir);
-		this->ReleaseClone(&szMainDir);
-		return;
-	}
-	this->ReleaseClone(&szMainDir);
-	CHAR **aszAddPaths = (CHAR **)malloc((1 + this->mstIncludePaths) * sizeof(CHAR *)) ;
-	size_t stAddPaths = 0;
+  struct stat st;
+  // make sure that relative paths are found wrt the main file
+  #ifdef _SHOW_DEBUG_INFO_INI
+  printf("Adding include path %s\n", szPath);
+  #endif
+  char *szCwd;
+  szCwd = getcwd(NULL, 512);
+  CHAR *szMainDir = this->DirName(this->mszMainFile);
+  if (chdir(szMainDir) != 0)
+  {
+    fprintf(stderr, "Unable to chdir() to '%s'; can't add path\n",szMainDir);
+    this->ReleaseClone(&szMainDir);
+    return;
+  }
+  this->ReleaseClone(&szMainDir);
+  CHAR **aszAddPaths = (CHAR **)malloc((1 + this->mstIncludePaths) * sizeof(CHAR *)) ;
+  size_t stAddPaths = 0;
 
-	if ((this->MergeAllPossibleIncludes || (stAddPaths == 0)) &&
-	    (stat(szPath, &st) == 0))
-		aszAddPaths[stAddPaths++] = this->CloneStr(szPath);
-	size_t stPathLen = strlen(szPath);
-	if (this->MergeAllPossibleIncludes || (stAddPaths == 0))
-	{
-		// allow addpaths from the search path directives
-		for (unsigned int i = 0; i < this->mstIncludePaths; i++)
-		{
-			CHAR *tmp = this->CloneStr(this->maszIncludePaths[i], strlen(PATH_DELIMITER) + stPathLen);
-			strcat(tmp, PATH_DELIMITER);
-			strcat(tmp, szPath);
-			if (stat(tmp, &st) == 0)
-			{
-			  if (this->MergeAllPossibleIncludes || (stAddPaths == 0))
-			  {
-					aszAddPaths[stAddPaths++] = tmp;
-			    if (!this->MergeAllPossibleIncludes)
-			      break;
-			  }
-				else
-					this->ReleaseClone(&tmp);
-			}
-		}
-	}
+  if ((this->MergeAllPossibleIncludes || (stAddPaths == 0)) &&
+      (stat(szPath, &st) == 0))
+    aszAddPaths[stAddPaths++] = this->CloneStr(szPath);
+  size_t stPathLen = strlen(szPath);
+  if (this->MergeAllPossibleIncludes || (stAddPaths == 0))
+  {
+    // allow addpaths from the search path directives
+    for (unsigned int i = 0; i < this->mstIncludePaths; i++)
+    {
+      CHAR *tmp = this->CloneStr(this->maszIncludePaths[i], strlen(PATH_DELIMITER) + stPathLen);
+      strcat(tmp, PATH_DELIMITER);
+      strcat(tmp, szPath);
+      if (stat(tmp, &st) == 0)
+      {
+        if (this->MergeAllPossibleIncludes || (stAddPaths == 0))
+        {
+          aszAddPaths[stAddPaths++] = tmp;
+          if (!this->MergeAllPossibleIncludes)
+            break;
+        }
+        else
+          this->ReleaseClone(&tmp);
+      }
+    }
+  }
   #ifdef _SHOW_DEBUG_INFO_INI
   if (stAddPaths == 0)
   {
-	  printf("Unable to find directory '%s' for #addpath\n", strPath.c_str());
-		free(aszAddPaths);
-		return;
+    printf("Unable to find directory '%s' for #addpath\n", strPath.c_str());
+    free(aszAddPaths);
+    return;
   }
   #endif
-	
-	for (unsigned int i = 0; i < stAddPaths; i++)
-	{
-	  if (stat(aszAddPaths[i], &st) == 0)
-	  {
-		  // cause includes from files of the same extension in matched paths
-			CHAR **aszPathFiles = NULL;
+  
+  for (unsigned int i = 0; i < stAddPaths; i++)
+  {
+    if (stat(aszAddPaths[i], &st) == 0)
+    {
+      // cause includes from files of the same extension in matched paths
+      CHAR **aszPathFiles = NULL;
   #if defined (WIN32) || defined (_W32_WCE) || defined (_WIN32)
-			CHAR *szMask = this->CloneStr("*.", strlen(this->mszMainFileExt));
-			strcat(szMask, this->mszMainFileExt);
-			size_t stPathFiles = this->ListDirContents(&aszPathFiles, aszAddPaths[i], true, szMask);
+      CHAR *szMask = this->CloneStr("*.", strlen(this->mszMainFileExt));
+      strcat(szMask, this->mszMainFileExt);
+      size_t stPathFiles = this->ListDirContents(&aszPathFiles, aszAddPaths[i], true, szMask);
   #else
-			size_t stPathFiles = this->ListDirContents(&aszPathFiles, aszAddPaths[i], true);
+      size_t stPathFiles = this->ListDirContents(&aszPathFiles, aszAddPaths[i], true);
   #endif
       #ifdef INI_DEBUG
       #if defined (WIN32) || defined (_W32_WCE) || defined (_WIN32)
@@ -1185,40 +1185,40 @@ void CINIFile::AddPath(const CHAR *szPath)
       printf("added path %s contains %u file(s) to check for includes\n", szPath, stPathFiles);
       #endif
       #endif
-		  for (unsigned int i = 0; i < stPathFiles; i++)
-		  {
-				CHAR *tmp = aszPathFiles[i];
-			  #ifdef _SHOW_DEBUG_INFO_INI
-			  printf("Checking file extension of %s against that of %s\n", tmp, this->mszMainFileExt);
-			  #endif
+      for (unsigned int i = 0; i < stPathFiles; i++)
+      {
+        CHAR *tmp = aszPathFiles[i];
+        #ifdef _SHOW_DEBUG_INFO_INI
+        printf("Checking file extension of %s against that of %s\n", tmp, this->mszMainFileExt);
+        #endif
   #if !defined (WIN32)
-			  if (this->_strcasecmp(this->FileExt(tmp), this->mszMainFileExt) == 0)
-			  {
+        if (this->_strcasecmp(this->FileExt(tmp), this->mszMainFileExt) == 0)
+        {
   #endif
           #ifdef _SHOW_DEBUG_INFO_INI
           printf("Calling IncludeFile on %s\n", tmp);
           #endif
-				  this->IncludeFile(tmp);
+          this->IncludeFile(tmp);
   #if !defined (WIN32)
-			  }
+        }
   #endif
-		  }
-	  }
-	}
-	if (chdir(szCwd))
-	{
-		fprintf(stderr, "Unable to chdir() back to '%s'\n", szCwd);
-	}
-	free(szCwd);
+      }
+    }
+  }
+  if (chdir(szCwd))
+  {
+    fprintf(stderr, "Unable to chdir() back to '%s'\n", szCwd);
+  }
+  free(szCwd);
 }
 
 bool CINIFile::FileExists(const CHAR *szFileName)
 {
-	struct stat st;
-	
-	if (stat(szFileName, &st) == 0)
-		return true;
-	return false;
+  struct stat st;
+  
+  if (stat(szFileName, &st) == 0)
+    return true;
+  return false;
 }
 
 bool CINIFile::ValueExists(const CHAR *szSection, const CHAR *szName)
@@ -1228,44 +1228,44 @@ bool CINIFile::ValueExists(const CHAR *szSection, const CHAR *szName)
   if (tmp == -1)
     return false;
   
-	if (this->ValueIDX((size_t)tmp, szName) == -1)
-		return false;
-	return true;
+  if (this->ValueIDX((size_t)tmp, szName) == -1)
+    return false;
+  return true;
 }
 
 bool CINIFile::SZToBool(const CHAR *sz)
 {
-	bool retVal;
-	
-	if ((strlen(sz) == 0) || (this->_strcasecmp(sz, "0") == 0) || 
-		(this->_strcasecmp(sz, "no") == 0) || 
-		(this->_strcasecmp(sz, "false") == 0) ||
-		(this->_strcasecmp(sz, "off") == 0) ||
-		(this->_strcasecmp(sz, "disabled") == 0))
-	{
-		#ifdef _SHOW_DEBUG_INFO_INI
-		printf("strToBool returning false for std::string \"%s\"\n", str.c_str());
-		#endif
-		retVal = false;
-	}
-	else if ((this->_strcasecmp(sz, "true") == 0) ||
-				(this->_strcasecmp(sz, "yes") == 0) ||
-				(this->_strcasecmp(sz, "on") == 0) ||
-				(this->_strcasecmp(sz, "enabled") == 0) ||
-				(strtoul(sz, NULL, 10) != 0))
-	{
-		#ifdef _SHOW_DEBUG_INFO_INI
-		printf("  strToBool returning true for std::string '%s'\n", str.c_str());
-		#endif
-		retVal = true;
-	}
-	else
-	{
-		printf("CINIFile::strToBool: WARNING: unrecognised boolean value: \"%s\"; assuming false", sz);
-		retVal = false;
-	}
-	
-	return retVal;
+  bool retVal;
+  
+  if ((strlen(sz) == 0) || (this->_strcasecmp(sz, "0") == 0) || 
+    (this->_strcasecmp(sz, "no") == 0) || 
+    (this->_strcasecmp(sz, "false") == 0) ||
+    (this->_strcasecmp(sz, "off") == 0) ||
+    (this->_strcasecmp(sz, "disabled") == 0))
+  {
+    #ifdef _SHOW_DEBUG_INFO_INI
+    printf("strToBool returning false for std::string \"%s\"\n", str.c_str());
+    #endif
+    retVal = false;
+  }
+  else if ((this->_strcasecmp(sz, "true") == 0) ||
+        (this->_strcasecmp(sz, "yes") == 0) ||
+        (this->_strcasecmp(sz, "on") == 0) ||
+        (this->_strcasecmp(sz, "enabled") == 0) ||
+        (strtoul(sz, NULL, 10) != 0))
+  {
+    #ifdef _SHOW_DEBUG_INFO_INI
+    printf("  strToBool returning true for std::string '%s'\n", str.c_str());
+    #endif
+    retVal = true;
+  }
+  else
+  {
+    printf("CINIFile::strToBool: WARNING: unrecognised boolean value: \"%s\"; assuming false", sz);
+    retVal = false;
+  }
+  
+  return retVal;
 }
 
 long long CINIFile::SectionIDX(const CHAR *szSection)
@@ -1277,37 +1277,37 @@ long long CINIFile::ValueIDX(size_t stSectionIndex, const CHAR *szName)
 {
   if (szName == NULL)
     return -1;
-	if (stSectionIndex >= this->mstSections)
-	  return -1;
-	  
+  if (stSectionIndex >= this->mstSections)
+    return -1;
+    
   CIniFileSection *s = this->masSections[stSectionIndex];
   return s->SettingIndex(szName);
   /*
-	for (size_t i = 0; i < s->SettingCount; i++)
-	{
-	  if (this->_strcasecmp(s->Settings[i]->Name, szName) == 0)
-		{
-			return (long long)i;
-		}
-	}
-	return -1;
-	*/
+  for (size_t i = 0; i < s->SettingCount; i++)
+  {
+    if (this->_strcasecmp(s->Settings[i]->Name, szName) == 0)
+    {
+      return (long long)i;
+    }
+  }
+  return -1;
+  */
 }
 
 CHAR *CINIFile::IntToSZ(long long val)
 {
-	CHAR *ret = this->CloneStr(NULL, 64);
-	sprintf(ret, "%lli", (long long)val);
-	return ret;
+  CHAR *ret = this->CloneStr(NULL, 64);
+  sprintf(ret, "%lli", (long long)val);
+  return ret;
 }
 
 CHAR *CINIFile::BoolToSZ(bool val)
 {
-	// use cloned strings just for consistency with other *ToSZ methods
-	if (val)
-		return this->CloneStr("yes");
-	else
-		return this->CloneStr("no");
+  // use cloned strings just for consistency with other *ToSZ methods
+  if (val)
+    return this->CloneStr("yes");
+  else
+    return this->CloneStr("no");
 }
 
 void CINIFile::FreeSZArray(CHAR **aszToFree, size_t stElements)
@@ -1434,15 +1434,15 @@ size_t CINIFile::split(CHAR ***aszOut, const CHAR *szStr, const CHAR *szDelimite
 
 void CINIFile::strcpy_overlapped(CHAR *szDst, CHAR *szSrc)
 {
-	// this is only here to make paranoid memory watchers happy when
-	//	basically shifting part of a string up towards the start
-	#ifndef QUICK_UNSAFE_STRINGS
-	CHAR *szTmp = this->CloneStr(szSrc);
-	strcpy(szDst, szTmp);
-	this->ReleaseClone(&szTmp);
-	#else
-	strcpy(sz, pos);
-	#endif
+  // this is only here to make paranoid memory watchers happy when
+  //  basically shifting part of a string up towards the start
+  #ifndef QUICK_UNSAFE_STRINGS
+  CHAR *szTmp = this->CloneStr(szSrc);
+  strcpy(szDst, szTmp);
+  this->ReleaseClone(&szTmp);
+  #else
+  strcpy(sz, pos);
+  #endif
 }
 
 size_t CINIFile::split_buffer(CHAR ***aszOut, CHAR *szStr, const CHAR *szDelimiter, const CHAR *szQuoteDelimiter)
@@ -1556,7 +1556,7 @@ CHAR *CINIFile::ltrim(CHAR *sz, const CHAR *szTrimChars)
   while ((*pos != '\0') && (strchr(szTrimChars, *pos)))
     pos++;
   if (pos != sz)
-		this->strcpy_overlapped(sz, pos);
+    this->strcpy_overlapped(sz, pos);
   return sz;
 }
 
@@ -1614,19 +1614,19 @@ CHAR * CINIFile::join(const CHAR **aszParts, size_t stParts, const CHAR *szDelim
     stReq += strlen(aszParts[i]);
 
   CHAR *ret = this->CloneStr("", stReq);
-	
-	for (size_t i = stStart; i < stEnd; i++)
-	{
+  
+  for (size_t i = stStart; i < stEnd; i++)
+  {
     if (i > stStart)
       strcat(ret, szDelimiter);
     strcat(ret, aszParts[i]);
-	}
-	return ret;
+  }
+  return ret;
 }
 
 void CINIFile::CleanLine(CHAR **szLine, CHAR **szComments)
 {
-	// remove comments -- remember INI files use ";" for a comment
+  // remove comments -- remember INI files use ";" for a comment
   // works on input buffer; *szComments, if not NULL, points into
   //  the original buffer
   *szComments = NULL;
@@ -1698,34 +1698,34 @@ unsigned int CINIFile::SetValue(const CHAR *szSection, const CHAR *szName, const
   
   long long vpos = -1;
   if (spos > -1)
-	  vpos = this->ValueIDX((size_t)spos, szName);
-	CIniFileItem *ii = NULL;
-	if (vpos == -1)
-	{
-	  this->mfSorted = false;
-	  CIniFileSection *s;
-	  if (spos == -1)
-	  {
-	    s = new CIniFileSection();
-	    s->owner = this;
+    vpos = this->ValueIDX((size_t)spos, szName);
+  CIniFileItem *ii = NULL;
+  if (vpos == -1)
+  {
+    this->mfSorted = false;
+    CIniFileSection *s;
+    if (spos == -1)
+    {
+      s = new CIniFileSection();
+      s->owner = this;
       if (fReferenceInputBuffers)
-  	    s->Name = (CHAR *)szSection;
+        s->Name = (CHAR *)szSection;
       else
       {
         CLONESTR(s->Name, szSection);
         s->ChangedName = true;
       }
       spos = this->PushSection(s);
-	  }
-	  else
-	    s = this->masSections[(size_t)spos];
-	    
-		ii = new CIniFileItem();
-		s->PushSetting(ii);
-		vpos = s->SettingCount - 1;
-	}
-	else
-	  ii = this->masSections[(size_t)spos]->Settings[(size_t)vpos];
+    }
+    else
+      s = this->masSections[(size_t)spos];
+      
+    ii = new CIniFileItem();
+    s->PushSetting(ii);
+    vpos = s->SettingCount - 1;
+  }
+  else
+    ii = this->masSections[(size_t)spos]->Settings[(size_t)vpos];
   if (!this->str_equal(ii->Name, szName))
   {
     if (fReferenceInputBuffers)
@@ -1756,13 +1756,13 @@ unsigned int CINIFile::SetValue(const CHAR *szSection, const CHAR *szName, const
       ii->ChangedComment = true;
     }
   }
-	ii->MemOnly = fMemOnly;
-	
+  ii->MemOnly = fMemOnly;
+  
   // cache this for lookup purposes later
   this->mstLastSectionIndex = (size_t)spos;
   this->mszLastSection = this->masSections[this->mstLastSectionIndex]->Name;
   
-	return (unsigned int)vpos;
+  return (unsigned int)vpos;
 }
 
 bool CINIFile::str_equal(const CHAR *sz1, const CHAR *sz2)
@@ -1837,45 +1837,45 @@ const CHAR *CINIFile::ToSZ(const CHAR *szHeader, bool fShowComments)
   } while (0)
 
   if (szHeader && (strlen(szHeader)) && fShowComments)
-	{
+  {
     CHAR **aszHeaderLines = NULL;
     size_t stHeaderLines = this->split(&aszHeaderLines, szHeader, NEWLINE);
-		for (unsigned int i = 0; i < stHeaderLines; i++)
-		{
+    for (unsigned int i = 0; i < stHeaderLines; i++)
+    {
       CHAR *szLine = aszHeaderLines[i];
-			if ((strlen(szLine) == 0) || (szLine[0] != ';'))
+      if ((strlen(szLine) == 0) || (szLine[0] != ';'))
         APPEND(";");
       APPEND(szLine);
       APPEND(NEWLINE);
-		}
+    }
     APPEND(NEWLINE);
     this->FreeSZArray(aszHeaderLines, stHeaderLines);
-	}
-	
-	CIniFileSection *section;
-	for (size_t i = 0; i < this->mstSections; i++)
-	{
-	  section = this->masSections[i];
-	  if (i)
-			APPEND(NEWLINE);
-	  if (section->Name)   // enable simple conf file usage
-	  {
+  }
+  
+  CIniFileSection *section;
+  for (size_t i = 0; i < this->mstSections; i++)
+  {
+    section = this->masSections[i];
+    if (i)
+      APPEND(NEWLINE);
+    if (section->Name)   // enable simple conf file usage
+    {
       APPEND("[");
       APPEND(section->Name);
       APPEND("]");
       APPEND(NEWLINE);
     }
-	  for (size_t j = 0; j < section->SettingCount; j++)
-	  {
-  	  if (section->Settings[j]->MemOnly)    // todo: perhaps apply a better way to do this
-  	    continue;
-  	  if (section->Settings[j]->IsLineComment)
-  	  {
-  	    if (fShowComments && section->Settings[j]->Comment && strlen(section->Settings[j]->Comment))
+    for (size_t j = 0; j < section->SettingCount; j++)
+    {
+      if (section->Settings[j]->MemOnly)    // todo: perhaps apply a better way to do this
+        continue;
+      if (section->Settings[j]->IsLineComment)
+      {
+        if (fShowComments && section->Settings[j]->Comment && strlen(section->Settings[j]->Comment))
           APPEND(section->Settings[j]->Comment);
-  	    continue;
-  	  }
-  		if (fShowComments && section->Settings[j]->Comment && strlen(section->Settings[j]->Comment))
+        continue;
+      }
+      if (fShowComments && section->Settings[j]->Comment && strlen(section->Settings[j]->Comment))
       {
         APPEND(";");
         APPEND(section->Settings[j]->Comment);
@@ -1888,12 +1888,12 @@ const CHAR *CINIFile::ToSZ(const CHAR *szHeader, bool fShowComments)
         APPEND(section->Settings[j]->Value);
         APPEND(NEWLINE);
       }
-	  }
-	}
-	
-	if (fShowComments && this->mszTrailingComment && (strlen(this->mszTrailingComment)))
+    }
+  }
+  
+  if (fShowComments && this->mszTrailingComment && (strlen(this->mszTrailingComment)))
     APPEND(this->mszTrailingComment);
-	return this->mszRenderBuffer;
+  return this->mszRenderBuffer;
 #undef APPEND
 }
 
@@ -1917,10 +1917,10 @@ bool CINIFile::WriteTabularFile(const CHAR *szFileName)
   FILE *fp = fopen(szFileName, "wb");
   if (fp == NULL)
     return false;
-	const CHAR *szTab = "\t";
+  const CHAR *szTab = "\t";
   #define WRITESTR(_str) \
   do { \
-		size_t _len = strlen(_str); \
+    size_t _len = strlen(_str); \
     if (fwrite(_str, sizeof(CHAR), _len, fp) != _len) \
     { \
       fclose(fp); \
@@ -1986,14 +1986,14 @@ bool CINIFile::WriteFile(const CHAR *szFileName, const CHAR *szHeader)
     szOutFile = this->mszMainFile;
   if (this->mfTableFormat)
     return this->WriteTabularFile(szOutFile);
-	FILE *fp = fopen(szOutFile, "wb");
-	if (fp == NULL)
-	{
-		fprintf(stderr, "ERROR: Unable to open '%s' for writing: %s\n", szOutFile,
-		  this->Error(errno)); 
-		return false;
-	}
-	
+  FILE *fp = fopen(szOutFile, "wb");
+  if (fp == NULL)
+  {
+    fprintf(stderr, "ERROR: Unable to open '%s' for writing: %s\n", szOutFile,
+      this->Error(errno)); 
+    return false;
+  }
+  
 #define APPEND(sz) \
   do { \
     if (sz) \
@@ -2013,63 +2013,63 @@ bool CINIFile::WriteFile(const CHAR *szFileName, const CHAR *szHeader)
   } while (0)
 
   if (szHeader && (strlen(szHeader)))
-	{
+  {
     CHAR **aszLines = NULL;
     size_t stLines = this->split(&aszLines, szHeader, NEWLINE);
-		for (unsigned int i = 0; i < stLines; i++)
-		{
+    for (unsigned int i = 0; i < stLines; i++)
+    {
       CHAR *szLine = aszLines[i];
-			if ((strlen(szLine) == 0) || (szLine[0] != ';'))
+      if ((strlen(szLine) == 0) || (szLine[0] != ';'))
         APPEND(";");
       APPEND(szLine);
       APPEND(NEWLINE);
-		}
+    }
     this->FreeSZArray(aszLines, stLines);
     APPEND(NEWLINE);
-	}
-	
-	// write out
-	CIniFileSection *section;
-	fflush(fp);
-	for (size_t i = 0; i < this->mstSections; i++)
-	{
-	  if (i)
+  }
+  
+  // write out
+  CIniFileSection *section;
+  fflush(fp);
+  for (size_t i = 0; i < this->mstSections; i++)
+  {
+    if (i)
       APPEND(NEWLINE);
-	  section = this->masSections[i];
-	  if (section->Name && strlen(section->Name))   // enable simple conf file handling
-	  {
+    section = this->masSections[i];
+    if (section->Name && strlen(section->Name))   // enable simple conf file handling
+    {
       APPEND("[");
       APPEND(section->Name);
       APPEND("]");
       APPEND(NEWLINE);
-  	}
-		
-	  for (size_t j = 0; j < section->SettingCount; j++)
-	  {
-	    if (section->Settings[j]->MemOnly)
-	      continue;
+    }
+    
+    for (size_t j = 0; j < section->SettingCount; j++)
+    {
+      if (section->Settings[j]->MemOnly)
+        continue;
       CIniFileItem *setting = section->Settings[j];
-	    if (setting->Comment && strlen(setting->Comment))
-  		{
+      if (setting->Comment && strlen(setting->Comment))
+      {
         APPEND(";");
         APPEND(setting->Comment);
         APPEND(NEWLINE);
-  		}
-  		if (section->Settings[j]->IsLineComment)
+      }
+      if (section->Settings[j]->IsLineComment)
         APPEND(setting->Value);
-  		else 
+      else 
       {
         APPEND(setting->Name);
         APPEND("=");
         APPEND(setting->Value);
         APPEND(NEWLINE);
       }
-	  }
-	}
-	if (this->mszTrailingComment && (strlen(this->mszTrailingComment)))
+    }
+  }
+  if (this->mszTrailingComment && (strlen(this->mszTrailingComment)))
     APPEND(this->mszTrailingComment);
-	fclose(fp);
-	return true;
+  fclose(fp);
+  return true;
 }
 
 void CINIFile::SetComment(const CHAR *szSection, const CHAR *szName, const CHAR *szComment, const CHAR *szMissingVal)
@@ -2079,11 +2079,11 @@ void CINIFile::SetComment(const CHAR *szSection, const CHAR *szName, const CHAR 
   if (spos > -1)
     vpos = this->ValueIDX((size_t)spos, szName);
   if (vpos > -1)
-	{
-		CIniFileItem *ii = this->masSections[(size_t)spos]->Settings[(size_t)vpos];
-		ii->ChangedComment = true;
+  {
+    CIniFileItem *ii = this->masSections[(size_t)spos]->Settings[(size_t)vpos];
+    ii->ChangedComment = true;
     CLONESTR(ii->Comment, szComment);
-	}
+  }
   else
   { // add in the missing setting as a commented out line
     // this code is not perfect: if you set a new item's comment and then set the item, you will get
@@ -2092,7 +2092,7 @@ void CINIFile::SetComment(const CHAR *szSection, const CHAR *szName, const CHAR 
     sprintf(szTmp, ";%s", szName);
     this->SetValue(szSection, szTmp, szMissingVal, szComment);
     this->ReleaseClone(&szTmp);
-	}
+  }
 }
 
 void CINIFile::AppendComment(const CHAR *szSection, const CHAR *szName, const CHAR *szComment)
@@ -2100,118 +2100,118 @@ void CINIFile::AppendComment(const CHAR *szSection, const CHAR *szName, const CH
   long long spos = this->SectionIDX(szSection);
   long long vpos = -1;
   if (spos > -1)
-	  vpos = this->ValueIDX((size_t)spos, szName);
-	if (vpos == -1)
-	{
-	  CHAR *szTest = (CHAR *)malloc((2 + strlen(szName)) * sizeof(CHAR));
-	  sprintf(szTest, ";%s", szName);
-	  vpos = this->ValueIDX((size_t)spos, szTest);    // may already be in the file as an optional 
-	  free(szTest);
-	}
-	if (vpos > -1)
-	{
+    vpos = this->ValueIDX((size_t)spos, szName);
+  if (vpos == -1)
+  {
+    CHAR *szTest = (CHAR *)malloc((2 + strlen(szName)) * sizeof(CHAR));
+    sprintf(szTest, ";%s", szName);
+    vpos = this->ValueIDX((size_t)spos, szTest);    // may already be in the file as an optional 
+    free(szTest);
+  }
+  if (vpos > -1)
+  {
     CIniFileItem *setting = this->masSections[(size_t)spos]->Settings[(size_t)vpos];
-		size_t stAlloc = 0;
-	  if (setting->Comment && strlen(setting->Comment))
-	  {
-			stAlloc = strlen(setting->Comment);
+    size_t stAlloc = 0;
+    if (setting->Comment && strlen(setting->Comment))
+    {
+      stAlloc = strlen(setting->Comment);
       this->AppendString(&(setting->Comment), NEWLINE, &stAlloc, INI_SETTING_ALLOC_CHUNK, 1);
       this->AppendString(&(setting->Comment), ";  ", &stAlloc, INI_SETTING_ALLOC_CHUNK, 1);
-	  }
+    }
     this->AppendString(&(setting->Comment), szComment, &stAlloc, 1);
-	}
-	else
-		fprintf(stderr, "ERROR: Unable to append comment on '%s::%s': no such setting found\n", 
-			szSection, szName);
+  }
+  else
+    fprintf(stderr, "ERROR: Unable to append comment on '%s::%s': no such setting found\n", 
+      szSection, szName);
 }
 
 CHAR *CINIFile::Error(int e)
 {
   // you can free this with ReleaseClone() if you like, but you probably don't need to bother
   //  since it is freed at xtor time
-	CHAR *ret;
-	
-	#ifdef _REENTRANT
-	#ifndef ERR_BUF_SIZE
-	#define ERR_BUF_SIZE 64
-	#endif
-	char errbuf[ERR_BUF_SIZE];
-	strerror_r(e, errbuf, ERR_BUF_SIZE);
-	ret = this->CloneStr(errbuf);
-	#else
-	ret = this->CloneStr(strerror(e));
-	#endif
-	
-	return ret;
+  CHAR *ret;
+  
+  #ifdef _REENTRANT
+  #ifndef ERR_BUF_SIZE
+  #define ERR_BUF_SIZE 64
+  #endif
+  char errbuf[ERR_BUF_SIZE];
+  strerror_r(e, errbuf, ERR_BUF_SIZE);
+  ret = this->CloneStr(errbuf);
+  #else
+  ret = this->CloneStr(strerror(e));
+  #endif
+  
+  return ret;
 }
 
 #if defined (WIN32) || defined (_W32_WCE) || defined _WIN32
 size_t CINIFile::ListDirContents(CHAR ***aszOut, const CHAR *szDirName, bool fPrependDirName, const CHAR *szMask)
 #else
-size_t CINIFile::ListDirContents(CHAR ***aszOut, const CHAR *szDirName, bool fPrependDirName)				// don't know about file masks in *nix
+size_t CINIFile::ListDirContents(CHAR ***aszOut, const CHAR *szDirName, bool fPrependDirName)        // don't know about file masks in *nix
 #endif
 {
-	struct stat st;
-	size_t ret = 0;
-	if (stat(szDirName, &st) != 0)
-		return ret;
-	size_t stAlloc = 128;
-	*aszOut = (CHAR **)malloc(stAlloc * sizeof(CHAR *));
+  struct stat st;
+  size_t ret = 0;
+  if (stat(szDirName, &st) != 0)
+    return ret;
+  size_t stAlloc = 128;
+  *aszOut = (CHAR **)malloc(stAlloc * sizeof(CHAR *));
 #if defined (WIN32) || defined (_W32_WCE) || defined _WIN32
-	WIN32_FIND_DATA findFileData;
-	CHAR *szSearch = this->CloneStr(szDirName, strlen(PATH_DELIMITER) + strlen(szMask));
-	strcat(szSearch, PATH_DELIMITER);
-	strcat(szSearch, szMask);
-	HANDLE hFind = FindFirstFile(szSearch, &findFileData);
-	while (hFind != INVALID_HANDLE_VALUE)
-	{
-		CHAR *fn;
-		if (fPrependDirName)
-		{
-			fn = this->CloneStr(szDirName, strlen(PATH_DELIMITER) + strlen(findFileData.cFileName));
-			strcat(fn, PATH_DELIMITER);
-			strcat(fn, findFileData.cFileName);
-		}
-		else
-			fn = this->CloneStr(findFileData.cFileName);
-		if ((stAlloc - ret) < 2)
-		{
-			stAlloc += 128;
-			*aszOut = (CHAR **)realloc(*aszOut, stAlloc * sizeof(CHAR*));
-		}
-		(*aszOut)[ret] = fn;
-		if (!FindNextFile(hFind, &findFileData))
-			break;
-	}
-	this->ReleaseClone(&szSearch);
-	FindClose(hFind);
+  WIN32_FIND_DATA findFileData;
+  CHAR *szSearch = this->CloneStr(szDirName, strlen(PATH_DELIMITER) + strlen(szMask));
+  strcat(szSearch, PATH_DELIMITER);
+  strcat(szSearch, szMask);
+  HANDLE hFind = FindFirstFile(szSearch, &findFileData);
+  while (hFind != INVALID_HANDLE_VALUE)
+  {
+    CHAR *fn;
+    if (fPrependDirName)
+    {
+      fn = this->CloneStr(szDirName, strlen(PATH_DELIMITER) + strlen(findFileData.cFileName));
+      strcat(fn, PATH_DELIMITER);
+      strcat(fn, findFileData.cFileName);
+    }
+    else
+      fn = this->CloneStr(findFileData.cFileName);
+    if ((stAlloc - ret) < 2)
+    {
+      stAlloc += 128;
+      *aszOut = (CHAR **)realloc(*aszOut, stAlloc * sizeof(CHAR*));
+    }
+    (*aszOut)[ret] = fn;
+    if (!FindNextFile(hFind, &findFileData))
+      break;
+  }
+  this->ReleaseClone(&szSearch);
+  FindClose(hFind);
 #else
-	DIR *dir = opendir(szDirName);
-	if (dir)
-	{
-		struct dirent *ent;
-		while ((ent = readdir(dir)) != NULL)
-		{
-			CHAR *fn;
-			if (fPrependDirName)
-			{
-				fn = this->CloneStr(szDirName, strlen(PATH_DELIMITER) + strlen(ent->d_name));
-				strcat(fn, PATH_DELIMITER);
-				strcat(fn, ent->d_name);
-			}
-			else
-			  fn = this->CloneStr(ent->d_name);
-			if ((stAlloc - ret) < 2)
-			{
-				stAlloc += 128;
-				*aszOut = (CHAR **)realloc(*aszOut, stAlloc * sizeof(CHAR*));
-			}
-			(*aszOut)[ret] = fn;
-		}
-		closedir(dir);
-	}
+  DIR *dir = opendir(szDirName);
+  if (dir)
+  {
+    struct dirent *ent;
+    while ((ent = readdir(dir)) != NULL)
+    {
+      CHAR *fn;
+      if (fPrependDirName)
+      {
+        fn = this->CloneStr(szDirName, strlen(PATH_DELIMITER) + strlen(ent->d_name));
+        strcat(fn, PATH_DELIMITER);
+        strcat(fn, ent->d_name);
+      }
+      else
+        fn = this->CloneStr(ent->d_name);
+      if ((stAlloc - ret) < 2)
+      {
+        stAlloc += 128;
+        *aszOut = (CHAR **)realloc(*aszOut, stAlloc * sizeof(CHAR*));
+      }
+      (*aszOut)[ret] = fn;
+    }
+    closedir(dir);
+  }
 #endif
-	return ret;
+  return ret;
 }
 
 const CHAR *CINIFile::FileExt(const CHAR *szFileName)
@@ -2338,7 +2338,7 @@ const CHAR *CINIFile::GetSectionAlias(size_t stIndex)
 {
   if (stIndex < this->mstSections)
   {
-		CIniFileSection *s = this->masSections[stIndex];
+    CIniFileSection *s = this->masSections[stIndex];
     if (s->Alias && strlen(s->Alias))
       return s->Alias;
   }
@@ -2626,11 +2626,11 @@ bool CINIFile::WriteMemToFile(const CHAR *szFileName, void *vpFileData, size_t s
     #else
       printf("Unable to open %s for writing, will try again in 1 sec", szFileName);
     #endif
-		#if defined(WIN32) || defined(WIN64)
+    #if defined(WIN32) || defined(WIN64)
     Sleep(INI_SLEEP_FOPEN_FAILS);
-		#else
-		usleep(INI_SLEEP_FOPEN_FAILS * 1000);
-		#endif
+    #else
+    usleep(INI_SLEEP_FOPEN_FAILS * 1000);
+    #endif
   }
   if (fp)
   {
@@ -2825,42 +2825,42 @@ bool CINIFile::EnsureDirExists(const CHAR *szPath, bool fCheckParentOnly, const 
   while (pos)
   {
     *pos = '\0';
-		if (strlen(szMyPath))
-		{
-			if (stat(szMyPath, &st) == 0)
-			{
-				if (st.st_mode & S_IFDIR)
-				{
-					*pos = cPathDelimiter;
-					pos = strchr(++pos, cPathDelimiter);
-					continue;
-				}
-				else
-				{
-					#ifdef _LOG_H_
-					Log(LS_ERROR, "Can't create dir '%s': non-dir '%s' in the way", szCheckPath, szMyPath);
-					#else
-					fprintf(stderr, "Can't create dir '%s': non-dir '%s' in the way", szCheckPath, szMyPath);
-					#endif
-					RET(false);
-				}
-			}
-			#if defined(WIN32) || defined(WIN64)
-			if (mkdir(szMyPath) != 0)
-			#else
-			if (mkdir(szMyPath, S_IRWXU | S_IRWXG | S_IROTH) != 0)
-			#endif
-			{
-				if (!this->DirExists(szMyPath))   // perhaps something sneaky (like another thread) made this when we weren't looking....
-				#ifdef _LOG_H_
-  				Log(LS_ERROR, "Can't create dir '%s': mkdir fails", szMyPath);
-				#else
-				  fprintf(stderr, "Can't create dir '%s': mkdir fails", szMyPath);
-				#endif
-				
-				RET(false);
-			}
-		}
+    if (strlen(szMyPath))
+    {
+      if (stat(szMyPath, &st) == 0)
+      {
+        if (st.st_mode & S_IFDIR)
+        {
+          *pos = cPathDelimiter;
+          pos = strchr(++pos, cPathDelimiter);
+          continue;
+        }
+        else
+        {
+          #ifdef _LOG_H_
+          Log(LS_ERROR, "Can't create dir '%s': non-dir '%s' in the way", szCheckPath, szMyPath);
+          #else
+          fprintf(stderr, "Can't create dir '%s': non-dir '%s' in the way", szCheckPath, szMyPath);
+          #endif
+          RET(false);
+        }
+      }
+      #if defined(WIN32) || defined(WIN64)
+      if (mkdir(szMyPath) != 0)
+      #else
+      if (mkdir(szMyPath, S_IRWXU | S_IRWXG | S_IROTH) != 0)
+      #endif
+      {
+        if (!this->DirExists(szMyPath))   // perhaps something sneaky (like another thread) made this when we weren't looking....
+        #ifdef _LOG_H_
+          Log(LS_ERROR, "Can't create dir '%s': mkdir fails", szMyPath);
+        #else
+          fprintf(stderr, "Can't create dir '%s': mkdir fails", szMyPath);
+        #endif
+        
+        RET(false);
+      }
+    }
     *pos = cPathDelimiter;
     pos = strchr(++pos, cPathDelimiter);
   }
@@ -2872,7 +2872,7 @@ bool CINIFile::EnsureDirExists(const CHAR *szPath, bool fCheckParentOnly, const 
     RET(true);
   #else
   if (mkdir(szCheckPath, S_IRWXU | S_IRWXG | S_IROTH) == 0)
-  	RET(true);
+    RET(true);
   #endif
   else
   {
@@ -2892,24 +2892,24 @@ bool CINIFile::EnsureDirExists(const CHAR *szPath, bool fCheckParentOnly, const 
 
 bool CINIFile::DirExists(const CHAR *szPath)
 {
-	struct stat st;
-	if (stat(szPath, &st) == 0)
-	{
-		if (st.st_mode & S_IFDIR)
-			return true;
-	}
-	return false;
+  struct stat st;
+  if (stat(szPath, &st) == 0)
+  {
+    if (st.st_mode & S_IFDIR)
+      return true;
+  }
+  return false;
 }
 
 void CINIFile::PushIndex(SLookup ***a, size_t *stLen, size_t *stAllocated, const CHAR *szPush, size_t stPush)
 {
-	if ((*stAllocated - *stLen) < 2)
-	{
-		*stAllocated += INI_SETTING_ALLOC_CHUNK;
-		*a = (SLookup **)realloc(*a, (*stAllocated) * sizeof(SLookup *));
-	}
-	SLookup *tmp = new SLookup(szPush, stPush);
-	(*a)[(*stLen)++] = tmp;
+  if ((*stAllocated - *stLen) < 2)
+  {
+    *stAllocated += INI_SETTING_ALLOC_CHUNK;
+    *a = (SLookup **)realloc(*a, (*stAllocated) * sizeof(SLookup *));
+  }
+  SLookup *tmp = new SLookup(szPush, stPush);
+  (*a)[(*stLen)++] = tmp;
 }
 
 // CIniFileSection methods
